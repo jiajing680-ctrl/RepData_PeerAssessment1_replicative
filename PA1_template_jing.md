@@ -5,7 +5,9 @@ output:
     keep_md: true
 ---
 
-
+```r
+knitr::opts_chunk$set(echo=TRUE)
+```
 # Loading and preprocessing the data
 
 ## load the data
@@ -88,7 +90,7 @@ sum_steps<-tapply(activity$steps,activity$date,sum)
 hist(sum_steps, main="total number of steps taken each day", xlab="total number of steps")
 ```
 
-![](PA1_template_files/figure-html/histogram-1.png)<!-- -->
+![](PA1_template_jing_files/figure-html/histogram-1.png)<!-- -->
 ##Mean and median number of steps taken each day
 
 ```r
@@ -125,7 +127,7 @@ activity_mean<- activity_mean %>% mutate(hour=interval %/% 100, minute= interval
 plot(activity_mean$formal_time,activity_mean$steps_mean,type="l",xlab="Time interval",ylab="average steps")
 ```
 
-![](PA1_template_files/figure-html/plot of the average number of steps-1.png)<!-- -->
+![](PA1_template_jing_files/figure-html/plot of the average number of steps-1.png)<!-- -->
 ##The 5-minute interval that, on average, contains the maximum number of steps
 
 
@@ -183,7 +185,7 @@ sum_steps_2<-activity_2%>% group_by(date)%>% summarize(sum_steps=sum(steps))
 hist(sum_steps_2$sum_steps,main="total number of steps taken each day", xlab="total number of steps")
 ```
 
-![](PA1_template_files/figure-html/histogram of activity_2-1.png)<!-- -->
+![](PA1_template_jing_files/figure-html/histogram of activity_2-1.png)<!-- -->
 ## mean and median of steps
 
 ```r
@@ -225,16 +227,16 @@ ungroup(mean_step)
 ## # A tibble: 576 x 7
 ##    day_week interval step_mean  hour minute time_2 time_formal        
 ##    <chr>       <int>     <dbl> <dbl>  <dbl> <chr>  <dttm>             
-##  1 Weekday         0    2.25       0      0 00:00  2026-11-07 00:00:00
-##  2 Weekday         5    0.445      0      5 00:05  2026-11-07 00:05:00
-##  3 Weekday        10    0.173      0     10 00:10  2026-11-07 00:10:00
-##  4 Weekday        15    0.198      0     15 00:15  2026-11-07 00:15:00
-##  5 Weekday        20    0.0990     0     20 00:20  2026-11-07 00:20:00
-##  6 Weekday        25    1.59       0     25 00:25  2026-11-07 00:25:00
-##  7 Weekday        30    0.693      0     30 00:30  2026-11-07 00:30:00
-##  8 Weekday        35    1.14       0     35 00:35  2026-11-07 00:35:00
-##  9 Weekday        40    0          0     40 00:40  2026-11-07 00:40:00
-## 10 Weekday        45    1.80       0     45 00:45  2026-11-07 00:45:00
+##  1 Weekday         0    2.25       0      0 00:00  2026-11-08 00:00:00
+##  2 Weekday         5    0.445      0      5 00:05  2026-11-08 00:05:00
+##  3 Weekday        10    0.173      0     10 00:10  2026-11-08 00:10:00
+##  4 Weekday        15    0.198      0     15 00:15  2026-11-08 00:15:00
+##  5 Weekday        20    0.0990     0     20 00:20  2026-11-08 00:20:00
+##  6 Weekday        25    1.59       0     25 00:25  2026-11-08 00:25:00
+##  7 Weekday        30    0.693      0     30 00:30  2026-11-08 00:30:00
+##  8 Weekday        35    1.14       0     35 00:35  2026-11-08 00:35:00
+##  9 Weekday        40    0          0     40 00:40  2026-11-08 00:40:00
+## 10 Weekday        45    1.80       0     45 00:45  2026-11-08 00:45:00
 ## # … with 566 more rows
 ```
 
@@ -249,4 +251,4 @@ mtext("number of steps",outer= TRUE,side=2,line=1)
 mtext("interval",side=1,outer=TRUE,line=1)
 ```
 
-![](PA1_template_files/figure-html/plot of average steps on weekdays and weekends-1.png)<!-- -->
+![](PA1_template_jing_files/figure-html/plot of average steps on weekdays and weekends-1.png)<!-- -->
