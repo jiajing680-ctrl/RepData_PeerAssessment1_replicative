@@ -1,44 +1,15 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
+title: 'Reproducible Research: Peer Assessment 1'
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
+    dev: "png"
+    error: TRUE
 ---
 
 ```r
-knitr::opts_chunk$set(echo=TRUE)
-```
-# Loading and preprocessing the data
+knitr::opts_chunk$set(echo=TRUE,eval=TRUE)
 
-## load the data
-
-```r
-unzip("activity.zip")
-activity<-read.csv("activity.csv", head=TRUE)
-```
-## transform the data variable
-
-```r
-str(activity)
-```
-
-```
-## 'data.frame':	17568 obs. of  3 variables:
-##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
-##  $ date    : chr  "2012-10-01" "2012-10-01" "2012-10-01" "2012-10-01" ...
-##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
-```
-
-```r
-install.packages("lubridate")
-```
-
-```
-## Installing package into '/usr/local/lib/R/site-library'
-## (as 'lib' is unspecified)
-```
-
-```r
 library(lubridate)
 ```
 
@@ -73,6 +44,26 @@ library(dplyr)
 ## 
 ##     intersect, setdiff, setequal, union
 ```
+# Loading and preprocessing the data
+
+## load the data
+
+```r
+unzip("activity.zip")
+activity<-read.csv("activity.csv", head=TRUE)
+```
+## transform the data variable
+
+```r
+str(activity)
+```
+
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : chr  "2012-10-01" "2012-10-01" "2012-10-01" "2012-10-01" ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+```
 
 ```r
 activity<-activity %>% mutate(dataform=as.Date(activity$date))%>% mutate(weekday=wday(dataform,label=TRUE))
@@ -87,10 +78,10 @@ sum_steps<-tapply(activity$steps,activity$date,sum)
 ## Histogram of the total number of steps taken each day
 
 ```r
-hist(sum_steps, main="total number of steps taken each day", xlab="total number of steps")
+fig1<-hist(sum_steps, main="total number of steps taken each day", xlab="total number of steps")
 ```
 
-![](PA1_template_jing_files/figure-html/histogram-1.png)<!-- -->
+![](PA1_template_jing_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 ##Mean and median number of steps taken each day
 
 ```r
@@ -127,7 +118,7 @@ activity_mean<- activity_mean %>% mutate(hour=interval %/% 100, minute= interval
 plot(activity_mean$formal_time,activity_mean$steps_mean,type="l",xlab="Time interval",ylab="average steps")
 ```
 
-![](PA1_template_jing_files/figure-html/plot of the average number of steps-1.png)<!-- -->
+![](PA1_template_jing_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 ##The 5-minute interval that, on average, contains the maximum number of steps
 
 
@@ -185,7 +176,7 @@ sum_steps_2<-activity_2%>% group_by(date)%>% summarize(sum_steps=sum(steps))
 hist(sum_steps_2$sum_steps,main="total number of steps taken each day", xlab="total number of steps")
 ```
 
-![](PA1_template_jing_files/figure-html/histogram of activity_2-1.png)<!-- -->
+![](PA1_template_jing_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 ## mean and median of steps
 
 ```r
@@ -251,4 +242,4 @@ mtext("number of steps",outer= TRUE,side=2,line=1)
 mtext("interval",side=1,outer=TRUE,line=1)
 ```
 
-![](PA1_template_jing_files/figure-html/plot of average steps on weekdays and weekends-1.png)<!-- -->
+![](PA1_template_jing_files/figure-html/unnamed-chunk-10-1.png)<!-- -->

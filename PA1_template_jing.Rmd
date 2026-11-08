@@ -1,11 +1,16 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
+title: 'Reproducible Research: Peer Assessment 1'
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
+    dev: "png"
+    error: TRUE
 ---
 ```{r setup, include =TRUE}
-knitr::opts_chunk$set(echo=TRUE)
+knitr::opts_chunk$set(echo=TRUE,eval=TRUE)
+
+library(lubridate)
+library(dplyr)
 ```
 # Loading and preprocessing the data
 
@@ -15,25 +20,26 @@ unzip("activity.zip")
 activity<-read.csv("activity.csv", head=TRUE)
 ```
 ## transform the data variable
-```{r transform the data variable}
+```{r }
 str(activity)
-install.packages("lubridate")
-library(lubridate)
-library(dplyr)
+
 activity<-activity %>% mutate(dataform=as.Date(activity$date))%>% mutate(weekday=wday(dataform,label=TRUE))
 ```
 
 # What is mean total number of steps taken per day?
 ## total number of steps of each day
-``` {r total number of steps per day}
+``` {r }
 sum_steps<-tapply(activity$steps,activity$date,sum)
 ```
 ## Histogram of the total number of steps taken each day
-```{r histogram}
-hist(sum_steps, main="total number of steps taken each day", xlab="total number of steps")
+```{r echo=TRUE}
+
+fig1<-hist(sum_steps, main="total number of steps taken each day", xlab="total number of steps")
+
+
 ```
 ##Mean and median number of steps taken each day
-```{r mean and median of steps each day}
+```{r }
 mean_daysteps<-mean(sum_steps,na.rm=TRUE)
 median_daysteps<-median(sum_steps,na.rm=TRUE)
 print (mean_daysteps)
@@ -42,7 +48,7 @@ print (median_daysteps)
 
 # What is the average daily activity pattern?
 ## Time series plot of the average number of steps taken
-```{r plot of the average number of steps }
+```{r  }
 activity_mean<- activity %>% group_by(interval)%>% summarise(steps_mean=mean(steps,na.rm=TRUE))
 activity_mean<- activity_mean %>% mutate(hour=interval %/% 100, minute= interval%% 100, time_slot=sprintf("%02d:%02d",hour,minute), formal_time=strptime(time_slot,format="%H:%M"))
 plot(activity_mean$formal_time,activity_mean$steps_mean,type="l",xlab="Time interval",ylab="average steps")
@@ -50,7 +56,7 @@ plot(activity_mean$formal_time,activity_mean$steps_mean,type="l",xlab="Time inte
 ```
 ##The 5-minute interval that, on average, contains the maximum number of steps
 
-```{r maximum steps}
+```{r }
 activity_mean$interval[which.max(activity_mean$steps_mean)]
 
 ```
@@ -58,7 +64,7 @@ activity_mean$interval[which.max(activity_mean$steps_mean)]
 # Imputing missing values
 
 ## inspect into the missing value
-```{r missing value}
+```{r }
 sum_missing<-sum(is.na(activity))
 print(sum_missing)
 missing_col<-numeric(ncol(activity))
@@ -76,12 +82,12 @@ activity_2<-activity%>% mutate(steps = ifelse(is.na(steps), mean_steps,steps))
 
 ```
 ##Histogram of the total number of steps taken each day after missing values are imputed
-```{r histogram of activity_2}
+```{r }
 sum_steps_2<-activity_2%>% group_by(date)%>% summarize(sum_steps=sum(steps))
 hist(sum_steps_2$sum_steps,main="total number of steps taken each day", xlab="total number of steps")
 ```
 ## mean and median of steps
-```{r mean and median}
+```{r }
 mean_daysteps_2<-mean(sum_steps_2$sum_steps)
 median_daysteps_2<-median(sum_steps_2$sum_steps)
 print (mean_daysteps_2)
@@ -90,7 +96,7 @@ print (median_daysteps_2)
 
 # Are there differences in activity patterns between weekdays and weekends?
 
-```{r plot of average steps on weekdays and weekends}
+```{r }
 activity_2<-activity_2%>% mutate(day_week=ifelse(weekday %in% c("Sat","Sun"),"Weekend","Weekday"))
 mean_step<- activity_2 %>% group_by( day_week,interval)%>% summarise( step_mean= mean(steps))
 mean_step<-mean_step%>% mutate( hour=interval %/%100, minute=interval%%100,time_2=sprintf("%02d:%02d",hour,minute), time_formal=strptime(time_2,"%H:%M"))
